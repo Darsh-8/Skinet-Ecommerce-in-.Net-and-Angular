@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using skinet;
 
-namespace skinet.Controllers
+namespace API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
