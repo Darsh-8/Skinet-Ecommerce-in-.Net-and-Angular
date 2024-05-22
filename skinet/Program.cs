@@ -1,13 +1,12 @@
+using API.Extension;
 using API.Helpers;
-using Core.Interfaces;
+using API.Middleware;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 builder.Services.AddDbContext<StoreContext>((serviceProvider, options) =>
@@ -15,8 +14,9 @@ builder.Services.AddDbContext<StoreContext>((serviceProvider, options) =>
     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
     options.UseSqlite(configuration.GetConnectionString("DefaultsConnection"));
 });
+builder.Services.AddApplicationServices(builder.Configuration); // Pass builder.Configuration here
+builder.Services.AddSwaggerDocumentation(); // Call the new extension method
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -38,11 +38,13 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionMiddleware>();
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerDocumentation(); // Use the new extension method
 }
+
+app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 app.UseHttpsRedirection();
 
