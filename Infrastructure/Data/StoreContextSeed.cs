@@ -9,8 +9,16 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data
 {
+    /// <summary>
+    /// Class responsible for seeding initial data into the database.
+    /// </summary>
     public class StoreContextSeed
     {
+        /// <summary>
+        /// Seeds initial data into the database.
+        /// </summary>
+        /// <param name="context">The database context.</param>
+        /// <param name="loggerFactory">The logger factory.</param>
         public static async Task SeedAsync(StoreContext context, ILoggerFactory loggerFactory)
         {
             try

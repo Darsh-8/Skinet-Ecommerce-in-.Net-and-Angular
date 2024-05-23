@@ -9,17 +9,25 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
+
+// Add DbContext for StoreContext using SQLite
 builder.Services.AddDbContext<StoreContext>((serviceProvider, options) =>
 {
     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
     options.UseSqlite(configuration.GetConnectionString("DefaultsConnection"));
 });
-builder.Services.AddApplicationServices(builder.Configuration); // Pass builder.Configuration here
+
+// Add application services (assumed to be an extension method)
+builder.Services.AddApplicationServices(builder.Configuration);
+
+// Add Swagger for API documentation
 builder.Services.AddSwaggerDocumentation(); // Call the new extension method
+
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
+// Migrate and seed the database on application startup
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -39,6 +47,8 @@ using (var scope = app.Services.CreateScope())
 
 // Configure the HTTP request pipeline.
 app.UseMiddleware<ExceptionMiddleware>();
+
+// Enable Swagger in development environment
 if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerDocumentation(); // Use the new extension method

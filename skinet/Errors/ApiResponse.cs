@@ -1,19 +1,22 @@
-﻿
-namespace API.Errors
+﻿namespace API.Errors
 {
+    // Represents a standardized API response for errors
     public class ApiResponse
     {
-
+        // Initializes a new instance of the ApiResponse class with the specified status code and message
         public ApiResponse(int statusCode, string message = null)
         {
-            StatsCode = statusCode;
+            StatusCode = statusCode;
             Message = message ?? GetDefaultMessageForStatusCode(statusCode);
         }
 
+        // The HTTP status code of the response
+        public int StatusCode { get; set; }
 
-
-        public int StatsCode { get; set; }
+        // The message associated with the response
         public string Message { get; set; }
+
+        // Returns a default message for the given status code
         private string GetDefaultMessageForStatusCode(int statusCode)
         {
             return statusCode switch
