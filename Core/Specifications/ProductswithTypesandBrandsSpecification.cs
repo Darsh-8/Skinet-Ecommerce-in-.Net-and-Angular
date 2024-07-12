@@ -6,7 +6,11 @@ namespace Core.Specifications
     public class ProductswithTypesandBrandsSpecification : BaseSpecification<Product>
     {
         // Constructor to specify sorting criteria
-        public ProductswithTypesandBrandsSpecification(string sort, int? brandId, int? typeId) : base(x => (!brandId.HasValue || x.ProductBrandId == brandId) && (!typeId.HasValue || x.ProductTypeId == typeId))
+        public ProductswithTypesandBrandsSpecification(ProductsSpecParam productsParams)
+            : base(x =>
+                (string.IsNullOrEmpty(productsParams.Search) || x.Name.ToLower().Contains(productsParams.Search)) &&
+                (!productsParams.BrandId.HasValue || x.ProductBrandId == productsParams.BrandId) &&
+                (!productsParams.TypeId.HasValue || x.ProductTypeId == productsParams.TypeId))
         {
             // Include related entities (ProductType and ProductBrand)
             AddInclude(x => x.ProductType);
@@ -15,10 +19,12 @@ namespace Core.Specifications
             // Default sorting order by name
             AddOrderBy(x => x.Name);
 
+            ApplyPaging(productsParams.PageSize * (productsParams.PageIndex - 1), productsParams.PageSize);
+
             // Check if a specific sorting option is provided
-            if (!string.IsNullOrEmpty(sort))
+            if (!string.IsNullOrEmpty(productsParams.Sort))
             {
-                switch (sort)
+                switch (productsParams.Sort)
                 {
                     // Sort by price ascending
                     case "priceAsc":

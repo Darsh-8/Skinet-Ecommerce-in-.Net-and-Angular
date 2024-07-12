@@ -37,5 +37,7 @@ namespace Core.Interfaces
         /// <param name="spec">The specification to apply.</param>
         /// <returns>A list of entities matching the specifications.</returns>
         Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);
+
+        Task<int> CountAsync(ISpecification<T> spec);
     }
 }
