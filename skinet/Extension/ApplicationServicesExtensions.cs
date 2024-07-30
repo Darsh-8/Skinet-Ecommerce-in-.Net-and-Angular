@@ -13,6 +13,7 @@ namespace API.Extension
         {
             // Add scoped services for product repository and generic repository
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             // Configure behavior for handling invalid model states
