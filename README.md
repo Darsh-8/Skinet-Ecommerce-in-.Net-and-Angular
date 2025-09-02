@@ -129,6 +129,3 @@ We welcome contributions to Skinet! If you're interested in improving the projec
 5.  **Push your branch** to your forked repository.
 6.  **Open a Pull Request** to the `main` branch of the original repository, providing a detailed description of your changes.
 
-## 📝 License
-
-Skinet is distributed under the MIT License. See the `LICENSE` file in the repository (if provided) for more information.
